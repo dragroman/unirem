@@ -1,0 +1,18 @@
+services:
+  machine_next:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DRUPAL_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL:-https://uniremstroi.ru}
+        - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN:-uniremstroi.ru}
+        - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID:-GTM-XXXXXX}
+    image: registry.gitlab.com/86007/unirem-next:latest
+    environment:
+      - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
+      - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}
+      - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
+    container_name: unirem-next
+    platform: linux/amd64
+    ports:
+      - "3001:3000"
