@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Menu, X, Phone, Mail, ChevronDown, ChevronRight } from "lucide-react"
+import { Menu, X, Phone, Mail } from "lucide-react"
 import { CONTACTS } from "@/lib/constants"
 import {
   Drawer,
@@ -20,13 +21,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-
 import { Whatsapp } from "@/components/icons/Whatsapp"
 import { Telegram } from "@/components/icons/Telegram"
 import { DrawerDialog } from "@/components/shared/DrawerDialogCallback"
+import { getMenuItems, getSubmenuItems, hasSubmenu } from "@/data/pageContent"
+import { cn } from "@/lib/utils"
 
 export function MenuMobile() {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+  const menuItems = getMenuItems()
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -53,21 +57,60 @@ export function MenuMobile() {
 
         <div className="flex-1 overflow-y-auto px-4 py-2">
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="catalog" className="border-b">
-              <AccordionTrigger className="py-3 text-base font-medium hover:no-underline">
-                Каталог оборудования
-              </AccordionTrigger>
-              <AccordionContent></AccordionContent>
-            </AccordionItem>
+            {menuItems.map((item) => {
+              const isActive =
+                pathname === item.url || pathname.startsWith(item.url + "/")
+              const withSubmenu = hasSubmenu(item.id)
 
-            <AccordionItem value="information" className="border-b">
-              <AccordionTrigger className="py-3 text-base font-medium hover:no-underline">
-                Информация
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="flex flex-col space-y-2 py-1 pl-1"></div>
-              </AccordionContent>
-            </AccordionItem>
+              if (withSubmenu) {
+                const submenuItems = getSubmenuItems(item.id)
+                return (
+                  <AccordionItem value={item.id} key={item.id}>
+                    <AccordionTrigger
+                      className={cn("hover:text-emerald-600", {
+                        "text-emerald-600 font-semibold": isActive,
+                      })}
+                    >
+                      {item.title}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-2 pl-4">
+                        {submenuItems.map((subItem) => {
+                          const isSubActive = pathname === subItem.url
+                          return (
+                            <Link
+                              key={subItem.id}
+                              href={subItem.url}
+                              className={cn(
+                                "block py-2 text-sm hover:text-emerald-600",
+                                {
+                                  "text-emerald-600 font-semibold": isSubActive,
+                                }
+                              )}
+                            >
+                              {subItem.menuTitle || subItem.title}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                )
+              }
+
+              return (
+                <div key={item.id} className="py-4 border-b">
+                  <Link
+                    href={item.url}
+                    className={cn("block hover:text-emerald-600", {
+                      "text-emerald-600 font-semibold": isActive,
+                    })}
+                  >
+                    {item.title}
+                  </Link>
+                </div>
+              )
+            })}
           </Accordion>
 
           <div className="mt-6 space-y-4">
@@ -87,12 +130,6 @@ export function MenuMobile() {
                   {CONTACTS.whatsapp}
                 </Button>
               </a>
-              <a href={CONTACTS.telegram.link} target="_blank">
-                <Button variant="outline" className="w-full" size="lg">
-                  <Telegram className="mr-2 text-blue-600" />
-                  {CONTACTS.telegram.name}
-                </Button>
-              </a>
               <a href={`mailto:${CONTACTS.email}`} target="_blank">
                 <Button variant="outline" className="w-full" size="lg">
                   <Mail size={18} className="mr-2 text-blue-600" />
@@ -103,10 +140,6 @@ export function MenuMobile() {
             <DrawerDialog />
           </div>
         </div>
-
-        <DrawerFooter className="px-4 py-3 border-t mt-auto">
-          <div className="flex flex-col space-y-2">test</div>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

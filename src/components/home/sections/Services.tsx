@@ -81,9 +81,6 @@ const Services = () => {
                   {service.description}
                 </CardDescription>
               </CardContent>
-              <CardFooter>
-                <Button variant="default">Подробнее</Button>
-              </CardFooter>
             </Card>
           ))}
         </div>

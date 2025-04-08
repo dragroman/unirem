@@ -9,16 +9,6 @@ import "@/styles/globals.css"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 
-export const metadata: Metadata = {
-  title: {
-    default: "Next.js for Drupal",
-    template: "%s",
-  },
-  description: "A Next.js site powered by a Drupal backend.",
-
-  manifest: "/manifest.json",
-}
-
 const inter = localFont({
   src: [
     {
@@ -39,6 +29,16 @@ const inter = localFont({
   ],
   variable: "--font-inter",
 })
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://uniremstroi.ru"),
+  title: {
+    template: "%s | Универсал ремстрой",
+    default: "Универсал ремстрой - Ремонт и строительство во Владивостоке",
+  },
+  description:
+    "Профессиональный ремонт квартир, домов и коммерческих помещений во Владивостоке. Качественные материалы и опытные мастера.",
+}
 
 export default function RootLayout({
   // Layouts must accept a children prop.

@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { DrawerDialog } from "@/components/shared/DrawerDialogRequest"
 
 interface Slide {
   title: string
@@ -84,20 +86,12 @@ const HeroSlideshow = () => {
             </AnimatePresence>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
-                className="bg-emerald-700 hover:bg-emerald-600 text-white font-medium px-6 py-6"
-              >
-                Рассчитать стоимость
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="bg-transparent text-white border-white hover:bg-white/10 font-medium px-6 py-6"
-              >
-                Наши проекты
-              </Button>
+              <DrawerDialog title="Заказать проект" />
+              <Link href="/services/apartment">
+                <Button variant="outline" size="lg" className="">
+                  Наши проекты
+                </Button>
+              </Link>
             </div>
 
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8">

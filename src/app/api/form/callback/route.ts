@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const result = await drupal.fetch(url.toString(), {
       method: "POST",
       body: JSON.stringify({
-        webform_id: "callback",
+        webform_id: "call_back",
         name: body.name,
         phone: body.phone,
       }),

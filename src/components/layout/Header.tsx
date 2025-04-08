@@ -7,6 +7,7 @@ import { Menu, X, Phone, MapPin, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { MenuDesktop } from "@/components/shared/navigation/MenuDesktop"
 import { MenuMobile } from "@/components/shared/navigation/MenuMobile"
+import { DrawerDialog } from "../shared/DrawerDialogRequest"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -77,12 +78,7 @@ const Header = () => {
 
           {/* Contact Button and Menu Toggle */}
           <div className="flex items-center space-x-4">
-            <Button
-              variant="default"
-              className="hidden md:flex bg-emerald-700 hover:bg-emerald-600"
-            >
-              <Phone className="mr-2 h-4 w-4" /> Связаться с нами
-            </Button>
+            <DrawerDialog />
 
             {/* Mobile Navigation */}
             <MenuMobile />

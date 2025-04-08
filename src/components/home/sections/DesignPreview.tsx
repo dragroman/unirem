@@ -70,17 +70,6 @@ const DesignPreview = () => {
                   {style.description}
                 </CardDescription>
               </CardContent>
-              <CardFooter>
-                <Link href="/services/apartment" className="w-full">
-                  <Button
-                    variant="default"
-                    className="w-full group-hover:bg-emerald-600"
-                  >
-                    Подробнее
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardFooter>
             </Card>
           ))}
         </div>

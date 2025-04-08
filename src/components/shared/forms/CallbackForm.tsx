@@ -54,18 +54,15 @@ export function CallbackForm() {
       {isSuccess ? (
         <div className="flex flex-col items-center justify-center py-8">
           <div className="bg-green-100 rounded-full p-3 mb-4">
-            <Check className="h-8 w-8 text-green-600" />
+            <Check className="h-8 w-8" />
           </div>
-          <h3 className="text-xl font-medium text-green-600 mb-2">
+          <h3 className="text-xl font-medium mb-2">
             Заявка успешно отправлена!
           </h3>
           <p className="text-gray-600 text-center">
             Наши специалисты свяжутся с вами в ближайшее время
           </p>
-          <Button
-            className="mt-6 bg-blue-600 hover:bg-blue-700"
-            onClick={() => setIsSuccess(false)}
-          >
+          <Button className="mt-6" onClick={() => setIsSuccess(false)}>
             Отправить еще одну заявку
           </Button>
         </div>
@@ -111,7 +108,7 @@ export function CallbackForm() {
             <Button
               type="submit"
               size={"lg"}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Отправка..." : "Отправить заявку"}

@@ -38,7 +38,7 @@ export function RequestForm() {
       setIsSuccess(true)
       form.reset()
       sendGTMEvent({
-        event: "form_submit_success",
+        event: "calculate_application",
         form_name: "requestForm",
       })
     } catch (error) {
@@ -61,10 +61,7 @@ export function RequestForm() {
           <p className="text-gray-600 text-center">
             Наши специалисты свяжутся с вами в ближайшее время
           </p>
-          <Button
-            className="mt-6 bg-blue-600 hover:bg-blue-700"
-            onClick={() => setIsSuccess(false)}
-          >
+          <Button className="mt-6" onClick={() => setIsSuccess(false)}>
             Отправить еще одну заявку
           </Button>
         </div>
@@ -158,11 +155,7 @@ export function RequestForm() {
               )}
             />
 
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Отправка..." : "Отправить заявку"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>

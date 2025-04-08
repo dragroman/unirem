@@ -23,7 +23,13 @@ import { useState, useEffect } from "react"
 import { sendGTMEvent } from "@next/third-parties/google"
 import { RequestForm } from "./forms/RequestForm"
 
-export function DrawerDialog({ classname }: { classname?: string }) {
+export function DrawerDialog({
+  classname,
+  title,
+}: {
+  classname?: string
+  title?: string
+}) {
   const [open, setOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
 
@@ -44,12 +50,11 @@ export function DrawerDialog({ classname }: { classname?: string }) {
   // Общая кнопка для обоих компонентов
   const triggerButton = (
     <Button
-      variant="outline"
+      variant="default"
       size="lg"
-      className="bg-blue-600 hover:bg-blue-700 text-white hover:text-white"
       onClick={() => sendGTMEvent({ event: "openRequestForm", value: "1" })}
     >
-      Получить коммерческое предложение
+      {title || "Узнать стоимость"}
     </Button>
   )
 

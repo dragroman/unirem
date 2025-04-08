@@ -51,11 +51,11 @@ export function DrawerDialog({ classname }: { classname?: string }) {
   // Всегда рендерим кнопку, но с разными классами
   const triggerButton = (
     <Button
-      variant="outline"
+      variant="secondary"
       className={cn(buttonClasses, classname)}
       onClick={() => sendGTMEvent({ event: "openCallbackForm", value: "1" })}
     >
-      {!isDesktop && <PhoneCall className="h-4 w-4" />}
+      <PhoneCall className="h-4 w-4" />
       Обратный звонок
     </Button>
   )
