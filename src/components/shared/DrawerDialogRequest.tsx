@@ -52,6 +52,7 @@ export function DrawerDialog({
     <Button
       variant="default"
       size="lg"
+      className={`${classname}`}
       onClick={() => sendGTMEvent({ event: "openRequestForm", value: "1" })}
     >
       {title || "Узнать стоимость"}
@@ -75,9 +76,7 @@ export function DrawerDialog({
     </Dialog>
   ) : (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger className="hidden" asChild>
-        {triggerButton}
-      </DrawerTrigger>
+      <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Заполните форму</DrawerTitle>

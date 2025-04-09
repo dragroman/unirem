@@ -78,7 +78,7 @@ const Header = () => {
 
           {/* Contact Button and Menu Toggle */}
           <div className="flex items-center space-x-4">
-            <DrawerDialog />
+            <DrawerDialog classname="hidden md:flex" />
 
             {/* Mobile Navigation */}
             <MenuMobile isScrolled={scrolled} />
