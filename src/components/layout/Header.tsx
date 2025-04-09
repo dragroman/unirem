@@ -81,7 +81,7 @@ const Header = () => {
             <DrawerDialog />
 
             {/* Mobile Navigation */}
-            <MenuMobile />
+            <MenuMobile isScrolled={scrolled} />
           </div>
         </div>
       </div>

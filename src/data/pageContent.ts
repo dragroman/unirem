@@ -209,15 +209,28 @@ export function createPageMetadata(
   const page = getPageContent(pageId)
 
   if (!page) {
-    return {}
+    return {
+      title: "Универсал ремстрой",
+      description: "Профессиональный ремонт и строительство во Владивостоке",
+    }
   }
 
+  // Получаем родительскую страницу, если она есть
+  const parentPage = page.parent ? getPageContent(page.parent) : null
   const description = additionalDescription
     ? `${page.metaDescription || page.description} ${additionalDescription}`
     : page.metaDescription || page.description
 
+  const title =
+    page.metaTitle ||
+    (parentPage
+      ? `${page.title} - ${parentPage.title} | Универсал ремстрой`
+      : `${page.title} | Универсал ремстрой`)
+
   return {
-    title: page.metaTitle || page.title,
+    title: {
+      absolute: title,
+    },
     description: description,
     openGraph: page.image
       ? {
@@ -229,7 +242,7 @@ export function createPageMetadata(
               alt: page.title,
             },
           ],
-          title: page.metaTitle || page.title,
+          title: title,
           description: description,
           type: "website",
         }

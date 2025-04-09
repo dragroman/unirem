@@ -27,7 +27,7 @@ import { DrawerDialog } from "@/components/shared/DrawerDialogCallback"
 import { getMenuItems, getSubmenuItems, hasSubmenu } from "@/data/pageContent"
 import { cn } from "@/lib/utils"
 
-export function MenuMobile() {
+export function MenuMobile({ isScrolled }: { isScrolled: boolean }) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const menuItems = getMenuItems()
@@ -38,7 +38,12 @@ export function MenuMobile() {
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden h-12 w-12 border-2 hover:bg-emerald-600 hover:text-white hover:border-transparent active:bg-emerald-800 active:text-white active:border-transparent"
+          className={cn(
+            "lg:hidden h-12 w-12 border-2 hover:bg-emerald-600 hover:text-white hover:border-transparent active:bg-emerald-800 active:text-white active:border-transparent",
+            {
+              "text-white": isScrolled,
+            }
+          )}
         >
           <Menu className="h-8 w-8" />
           <span className="sr-only">Открыть меню</span>
@@ -81,6 +86,7 @@ export function MenuMobile() {
                             <Link
                               key={subItem.id}
                               href={subItem.url}
+                              onClick={() => setOpen(false)}
                               className={cn(
                                 "block py-2 text-sm hover:text-emerald-600",
                                 {
@@ -102,6 +108,7 @@ export function MenuMobile() {
                 <div key={item.id} className="py-4 border-b">
                   <Link
                     href={item.url}
+                    onClick={() => setOpen(false)}
                     className={cn("block hover:text-emerald-600", {
                       "text-emerald-600 font-semibold": isActive,
                     })}

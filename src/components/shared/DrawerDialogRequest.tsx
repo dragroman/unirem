@@ -75,7 +75,9 @@ export function DrawerDialog({
     </Dialog>
   ) : (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
+      <DrawerTrigger className="hidden" asChild>
+        {triggerButton}
+      </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Заполните форму</DrawerTitle>

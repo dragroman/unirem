@@ -32,7 +32,7 @@ const Footer = () => {
           </div>
 
           {/* Контакты */}
-          <div>
+          <div className="hidden md:block">
             <h3 className="text-xl font-bold mb-6 text-white">Контакты</h3>
             <ul className="space-y-4">
               <li className="flex items-start">
@@ -50,7 +50,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div>
+          <div className="hidden md:block">
             <h3 className="text-xl font-bold mb-6 text-white">Адрес</h3>
             <ul className="space-y-4">
               <li className="flex items-start">
@@ -68,37 +68,42 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="">
+          <div className="hidden md:block">
             <h3 className="text-xl font-bold mb-6 text-white">
               Социальные сети
             </h3>
             <div className="flex space-x-4">
               <a
                 href={SOCIAL.youtube.url}
+                target="_blank"
                 className=" hover:text-white transition-colors"
               >
                 <Youtube className="w-6 h-6" />
               </a>
               <a
                 href={SOCIAL.whatsapp.url}
+                target="_blank"
                 className=" hover:text-white transition-colors"
               >
                 <Whatsapp className="w-6 h-6" />
               </a>
               <a
                 href={SOCIAL.telegram.url}
+                target="_blank"
                 className=" hover:text-white transition-colors"
               >
                 <Telegram className="w-6 h-6" />
               </a>
               <a
                 href={SOCIAL.vk.url}
+                target="_blank"
                 className="hover:text-white transition-colors"
               >
                 <Vk className="w-6 h-6" />
               </a>
               <a
                 href={SOCIAL.instagram.url}
+                target="_blank"
                 className="hover:text-white transition-colors"
               >
                 <Instagram className="w-6 h-6" />

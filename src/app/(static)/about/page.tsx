@@ -129,7 +129,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">Наш путь</h2>
 
-          <div className="grid grid-cols-3 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
             {journeyData.map((item, index) => (
               <JourneyCard key={index} {...item} />
             ))}

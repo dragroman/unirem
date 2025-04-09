@@ -58,7 +58,7 @@ export default function DesignProjects() {
       />
 
       <Tabs defaultValue="italian" className="w-full">
-        <TabsList className="w-full flex justify-center mb-8">
+        <TabsList className="flex flex-wrap justify-center gap-2 py-6 md:py-10 h-auto">
           {designStyles.map((style) => (
             <TabsTrigger key={style.id} value={style.id} className="">
               {style.name}
@@ -66,7 +66,7 @@ export default function DesignProjects() {
           ))}
         </TabsList>
 
-        <div className="max-w-screen-lg mx-auto">
+        <div className="max-w-screen-lg px-4 mx-auto py-8">
           {designStyles.map((style) => (
             <TabsContent key={style.id} value={style.id} className="mt-6">
               <div className="mb-6">

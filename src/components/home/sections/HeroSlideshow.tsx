@@ -45,7 +45,7 @@ const HeroSlideshow = () => {
   }, [])
 
   return (
-    <section className="sm:px-4 md:px-8 py-4">
+    <section className="sm:px-4 md:px-8 md:py-4">
       <div className="text-white relative bg-gradient-to-r from-gray-950 to-gray-800 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -66,20 +66,21 @@ const HeroSlideshow = () => {
           </motion.div>
         </AnimatePresence>
 
-        <div className="container mx-auto px-8 py-20 md:py-18 relative z-10">
+        <div className="container mx-auto px-8 py-8 md:py-16 relative z-10">
           <div className="max-w-3xl">
             <AnimatePresence mode="wait">
               <motion.div
+                className="h-[300px] md:h-[380px]"
                 key={currentSlide}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <h1 className="text-4xl md:text-5xl lg:text-6xl h-[160px] sm:h-[300px] font-bold">
+                <h1 className="text-3xl md:text-5xl lg:text-6xl mb-10 font-bold">
                   {slides[currentSlide].title}
                 </h1>
-                <p className="text-lg md:text-xl opacity-90 h-[140px]">
+                <p className="text-lg md:text-xl opacity-90 mb-8">
                   {slides[currentSlide].description}
                 </p>
               </motion.div>

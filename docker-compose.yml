@@ -8,6 +8,8 @@ services:
         - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN:-img.chinq.ru}
         - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID:-GTM-XXXXXX}
     image: registry.gitlab.com/86007/unirem-next:latest
+    volumes:
+      - ./public/images:/app/public/images
     environment:
       - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
       - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}

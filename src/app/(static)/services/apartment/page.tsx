@@ -159,18 +159,22 @@ export default function DesignProjects() {
         image={pageContent.image}
       />
 
-      <Tabs defaultValue="italian" className="w-full">
-        <TabsList className="w-full flex justify-center py-10">
+      <Tabs defaultValue="italian" className="">
+        <TabsList className="flex flex-wrap justify-center gap-2 py-6 md:py-10 h-auto">
           {designStyles.map((style) => (
-            <TabsTrigger key={style.id} value={style.id} className="">
+            <TabsTrigger
+              key={style.id}
+              value={style.id}
+              className="text-sm md:text-base whitespace-nowrap"
+            >
               {style.name}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        <div className="max-w-screen-lg mx-auto">
+        <div className="max-w-screen-lg mx-auto px-4 py-8">
           {designStyles.map((style) => (
-            <TabsContent key={style.id} value={style.id} className="mt-6">
+            <TabsContent key={style.id} value={style.id}>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-emerald-700 mb-3">
                   {style.name}
