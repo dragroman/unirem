@@ -42,7 +42,7 @@ const pageContent: PageContentCollection = {
     title: "Ремонт квартир во Владивостоке",
     menuTitle: "Ремонт квартир",
     description:
-      "Комплексный ремонт квартир, коттеджей и офисов любой сложности. Работы выполняются с гарантией качества и в срок.",
+      "Комплексный ремонт квартир, коттеджей и офисов любой сложности. Гарантируем качество и соблюдение сроков!",
     image: "/images/services/apartment/American_1.jpg",
     metaTitle: "Ремонт квартир во Владивостоке",
     metaDescription:
@@ -215,21 +215,13 @@ export function createPageMetadata(
     }
   }
 
-  // Получаем родительскую страницу, если она есть
-  const parentPage = page.parent ? getPageContent(page.parent) : null
   const description = additionalDescription
     ? `${page.metaDescription || page.description} ${additionalDescription}`
     : page.metaDescription || page.description
 
-  const title =
-    page.metaTitle ||
-    (parentPage
-      ? `${page.title} - ${parentPage.title} | Универсал ремстрой`
-      : `${page.title} | Универсал ремстрой`)
-
   return {
     title: {
-      absolute: title,
+      absolute: page.metaTitle || `${page.title} | Универсал ремстрой`,
     },
     description: description,
     openGraph: page.image
@@ -242,7 +234,7 @@ export function createPageMetadata(
               alt: page.title,
             },
           ],
-          title: title,
+          title: page.metaTitle || page.title,
           description: description,
           type: "website",
         }

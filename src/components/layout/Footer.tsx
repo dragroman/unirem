@@ -7,7 +7,7 @@ import { Whatsapp } from "../icons/Whatsapp"
 import { Telegram } from "../icons/Telegram"
 import { Vk } from "../icons/Vk"
 import { Instagram } from "../icons/Instagram"
-import { SOCIAL } from "@/lib/constants"
+import { COMPANY, CONTACTS, SOCIAL } from "@/lib/constants"
 
 const Footer = () => {
   return (
@@ -38,14 +38,17 @@ const Footer = () => {
               <li className="flex items-start">
                 <Phone className="h-5 w-5 mr-3 text-emerald-500 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="">+7 (4212) 123-456</p>
-                  <p className="">8-800-123-45-67</p>
+                  <a href={`tel:${CONTACTS.phoneLink}`} className="">
+                    {CONTACTS.phone}
+                  </a>
                 </div>
               </li>
               <li className="flex items-start">
                 <Mail className="h-5 w-5 mr-3 text-emerald-500 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="">info@uniremstroi.ru</p>
+                  <a href={`mailto:${CONTACTS.email}`} className="">
+                    {CONTACTS.email}
+                  </a>
                 </div>
               </li>
             </ul>
@@ -56,14 +59,13 @@ const Footer = () => {
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-3 text-emerald-500 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="">г. Хабаровск, ул. Примерная, 123, офис 45</p>
+                  <p className="">{CONTACTS.address}</p>
                 </div>
               </li>
               <li className="flex items-start">
                 <Clock className="h-5 w-5 mr-3 text-emerald-500 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="">Пн-Пт: 9:00 - 18:00</p>
-                  <p className="">Сб: 10:00 - 15:00</p>
+                  <p className="">{CONTACTS.workingHours}</p>
                 </div>
               </li>
             </ul>

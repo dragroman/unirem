@@ -6,7 +6,7 @@ export const CONTACTS = {
     name: "Телеграм бот",
     link: "https://t.me/uniremstroi",
   },
-  email: "86007@mail.ru",
+  email: "uniremstroy86007@mail.ru",
   address: "г. Владивосток, ул. Дальзаводская 4,оф.530",
   chinaAddress: "150090, КНР, г. Харбин, р-он Наньган, ул. Фушуйлу, 99-5.",
   whatsapp: "+8615604819273",

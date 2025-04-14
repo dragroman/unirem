@@ -51,9 +51,7 @@ export function MenuDesktop() {
                           title={subItem.menuTitle || subItem.title}
                           href={subItem.url}
                           isActive={isSubActive}
-                        >
-                          {subItem.description}
-                        </ListItem>
+                        ></ListItem>
                       )
                     })}
                   </ul>

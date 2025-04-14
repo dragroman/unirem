@@ -8,7 +8,8 @@ import { notFound } from "next/navigation"
 const designStyles = [
   {
     id: "italian",
-    name: "Караоке Клуб (KTV)",
+    name: "Футуризм",
+    title: "Футуризм в дизайне караоке-клубов (KTV)",
     images: [
       "/images/services/commercial/KTV_1.jpg",
       "/images/services/commercial/KTV_2.jpg",
@@ -21,11 +22,12 @@ const designStyles = [
       "/images/services/commercial/KTV_9.jpg",
     ],
     description:
-      "Караоке клубы (KTV) - это современные развлекательные заведения, где каждая деталь интерьера создает атмосферу роскоши и комфорта. Профессиональное звуковое оборудование, стильная мебель, продуманное освещение и акустические решения делают пространство идеальным для отдыха и развлечений. Особое внимание уделяется дизайну VIP-комнат и общих зон, созданию правильной атмосферы с помощью современных материалов и технологий.",
+      "Интерьеры KTV часто отражают футуристический стиль, создавая атмосферу роскоши и технологичности. Упор делается на неоновое освещение, геометричные формы, современные материалы и профессиональное звуковое оборудование, чтобы обеспечить гостям незабываемый опыт. От VIP-комнат до общих зон, каждая деталь способствует созданию идеального пространства для отдыха и развлечений.",
   },
   {
     id: "american",
     name: "Японский стиль",
+    title: "Японский минимализм: гармония в дизайне ресторана",
     images: [
       "/images/services/commercial/Jp_commercial_1.jpg",
       "/images/services/commercial/Jp_commercial_2.jpg",
@@ -71,7 +73,7 @@ export default function DesignProjects() {
             <TabsContent key={style.id} value={style.id} className="mt-6">
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-emerald-700 mb-3">
-                  {style.name}
+                  {style.title}
                 </h2>
                 <p className="text-gray-700 mb-6">{style.description}</p>
               </div>

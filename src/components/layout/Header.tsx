@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, Phone, MapPin, Mail } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { MenuDesktop } from "@/components/shared/navigation/MenuDesktop"
 import { MenuMobile } from "@/components/shared/navigation/MenuMobile"
 import { DrawerDialog } from "../shared/DrawerDialogRequest"
