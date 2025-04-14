@@ -21,6 +21,18 @@ export interface PageContentCollection {
 }
 
 const pageContent: PageContentCollection = {
+  catalog: {
+    id: "catalog",
+    url: "/catalog",
+    title: "Каталог",
+    description:
+      "Узнайте о наших услугах и ценах на ремонт и строительство. Найдите идеальный вариант для вашего проекта.",
+    metaTitle: "Каталог услуг компании Универсал ремстрой",
+    metaDescription:
+      "Узнайте о наших услугах и ценах на ремонт и строительство. Найдите идеальный вариант для вашего проекта.",
+    isInMenu: true,
+    menuOrder: 1,
+  },
   services: {
     id: "services",
     url: "/services",
@@ -32,7 +44,7 @@ const pageContent: PageContentCollection = {
     metaDescription:
       "Комплексные услуги по ремонту квартир, отделке помещений, проектированию и строительству от компании Универсал ремстрой.",
     isInMenu: true,
-    menuOrder: 1,
+    menuOrder: 2,
   },
 
   // Подстраницы раздела "Услуги"
@@ -104,7 +116,7 @@ const pageContent: PageContentCollection = {
     metaDescription:
       "Контактная информация компании Универсал ремстрой. Телефоны, адрес офиса, электронная почта и форма обратной связи.",
     isInMenu: true,
-    menuOrder: 4,
+    menuOrder: 3,
   },
   about: {
     id: "about",
@@ -118,7 +130,7 @@ const pageContent: PageContentCollection = {
     metaDescription:
       "Узнайте о компании Универсал ремстрой - полный спектр услуг в сфере строительства и ремонта с фокусом на Дальневосточный регион",
     isInMenu: true,
-    menuOrder: 5,
+    menuOrder: 4,
   },
 
   help: {
@@ -132,7 +144,7 @@ const pageContent: PageContentCollection = {
     metaDescription:
       "Помощь и поддержка компании Универсал ремстрой. Инструкции, ответы на вопросы и контактная информация.",
     isInMenu: true,
-    menuOrder: 6,
+    menuOrder: 5,
   },
 
   helpProcessApartment: {
