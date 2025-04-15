@@ -34,9 +34,12 @@ export function MenuDesktop() {
             return (
               <NavigationMenuItem key={item.id}>
                 <NavigationMenuTrigger
-                  className={cn({
-                    "text-emerald-600 font-semibold": isActive,
-                  })}
+                  className={cn(
+                    {
+                      "text-emerald-600 font-semibold": isActive,
+                    },
+                    "text-md"
+                  )}
                 >
                   {item.title}
                 </NavigationMenuTrigger>
@@ -65,9 +68,13 @@ export function MenuDesktop() {
             <NavigationMenuItem key={item.id}>
               <Link href={item.url} legacyBehavior passHref>
                 <NavigationMenuLink
-                  className={cn(navigationMenuTriggerStyle(), {
-                    "text-emerald-600 font-semibold": isActive,
-                  })}
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    {
+                      "text-emerald-600 font-semibold": isActive,
+                    },
+                    "text-md"
+                  )}
                 >
                   {item.title}
                 </NavigationMenuLink>
@@ -100,13 +107,13 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div
-            className={cn("text-sm font-medium leading-none", {
+            className={cn("text-lg font-medium leading-none", {
               "text-emerald-600": isActive,
             })}
           >
             {title}
           </div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <p className="line-clamp-2 text-lg leading-snug text-muted-foreground">
             {children}
           </p>
         </a>

@@ -20,6 +20,7 @@ export default async function CatalogPage() {
     <div>
       <h1>Каталог</h1>
       <p>Список товаров</p>
+
       <CatalogList items={materials} />
     </div>
   )
