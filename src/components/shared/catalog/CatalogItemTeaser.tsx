@@ -6,7 +6,7 @@ import { CatalogItemTeaserProps } from "./types"
 export default function CatalogItemTeaser({ item }: CatalogItemTeaserProps) {
   return (
     <Link
-      href={`/catalog/${item.drupal_internal__nid.toString()}`}
+      href={`/catalog/${item.drupal_internal__nid}`}
       key={item.id}
       className="bg-white hover:shadow-lg transition-shadow"
     >
