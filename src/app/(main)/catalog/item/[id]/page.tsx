@@ -1,3 +1,4 @@
+import Breadcrumbs from "@/components/shared/catalog/Breadcrumbs"
 import {
   Table,
   TableBody,
@@ -38,6 +39,18 @@ const t = {
   field_example: "Примеры",
 }
 
+interface MaterialDetailPageProps extends DrupalNode {
+  field_category: {
+    name: string
+    parent: [
+      {
+        drupal_internal__tid: string
+        name: string
+      },
+    ]
+  }
+}
+
 export default async function MaterialDetailPage({
   params,
 }: {
@@ -46,36 +59,29 @@ export default async function MaterialDetailPage({
   const { id } = await params
 
   try {
-    const material = await drupal.getResourceByPath<DrupalNode>(`/node/${id}`, {
-      params: {
-        "fields[node--material]":
-          "title,field_image,field_vendor_code,field_brand,field_color,field_image,field_category,field_technical_description,field_length,field_thickness,field_width,field_material,field_surface,field_texture,field_price,field_price_m2,field_size,field_delivery_time,field_inventory,field_example",
-        include: "field_image,uid,field_category",
-      },
-    })
+    const material = await drupal.getResourceByPath<MaterialDetailPageProps>(
+      `/item/${id}`,
+      {
+        params: {
+          "fields[node--material]":
+            "title,field_image,field_vendor_code,field_brand,field_color,field_image,field_category,field_technical_description,field_length,field_thickness,field_width,field_material,field_surface,field_texture,field_price,field_price_m2,field_size,field_delivery_time,field_inventory,field_example",
+          include: "field_image,uid,field_category,field_category.parent", // добавили parent
+        },
+      }
+    )
     if (!material) {
       throw new Response("Not Found", { status: 404 })
     }
+
+    const parentTerm = material.field_category.parent[0]
+
+    console.log(material)
 
     return (
       <article className="container mx-auto px-4 py-10">
         <div className="grid md:grid-cols-2 gap-10">
           <div>
-            <div className="relative h-[300px]">
-              <Image
-                src={absoluteUrl(material.field_image[0].uri.url)}
-                alt={material.title || "Изображение материала"}
-                className="object-cover"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                priority={false}
-                loading="lazy"
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAEtAJJXIDTjwAAAABJRU5ErkJggg=="
-              />
-            </div>
-          </div>
-          <div>
+            <Breadcrumbs parentTerm={parentTerm} term={material} />
             <h1 className="text-4xl font-bold mb-6">{material.title}</h1>
             <div className="mb-4">
               {t.sku}: {material.field_vendor_code}
@@ -156,6 +162,21 @@ export default async function MaterialDetailPage({
                 className="prose prose-lg max-w-none mt-6"
               />
             )}
+          </div>
+          <div>
+            <div className="relative h-[300px]">
+              <Image
+                src={absoluteUrl(material.field_image[0].uri.url)}
+                alt={material.title || "Изображение материала"}
+                className="object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={false}
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAEtAJJXIDTjwAAAABJRU5ErkJggg=="
+              />
+            </div>
           </div>
         </div>
       </article>

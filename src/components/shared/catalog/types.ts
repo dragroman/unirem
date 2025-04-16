@@ -23,3 +23,12 @@ export interface CatalogItem {
     }
   }>
 }
+
+export interface Term {
+  field_category: ParentTerm
+}
+
+export interface ParentTerm {
+  name?: string
+  drupal_internal__tid?: string
+}

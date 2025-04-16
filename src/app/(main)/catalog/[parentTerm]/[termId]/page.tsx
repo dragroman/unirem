@@ -38,11 +38,7 @@ export default async function TermCategoryPage({
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-2xl font-bold mb-6">{currentTerm.name}</h1>
-      <p className="text-sm text-gray-500 mb-4">
-        <Link href="/catalog">Каталог</Link> /{" "}
-        <Link href={`/catalog/${parentTerm}`}>{parentTermInfo.name}</Link> /
-        {currentTerm.name}
-      </p>
+
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
         {materials.length > 0 ? (
           materials.map((item) => (

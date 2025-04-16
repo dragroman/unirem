@@ -41,9 +41,9 @@ const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html className="h-full" lang="en">
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
-      <body className={`${inter.className} antialiased scroll-smooth`}>
+      <body className={`${inter.className} antialiased scroll-smooth h-full`}>
         {children}
       </body>
     </html>
