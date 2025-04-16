@@ -1,14 +1,20 @@
-import { absoluteUrl } from "@/lib/utils"
+// src/components/catalog/ui/CatalogCard.tsx
+import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { CatalogItemTeaserProps } from "./types"
+import { Material } from "@/types/material"
+import { absoluteUrl } from "@/lib/utils"
 
-export default function CatalogItemTeaser({ item }: CatalogItemTeaserProps) {
+interface CatalogCardProps {
+  item: Material
+  className?: string
+}
+
+export function CatalogCard({ item, className = "" }: CatalogCardProps) {
   return (
     <Link
       href={`/catalog/item/${item.drupal_internal__nid}`}
-      key={item.id}
-      className="bg-white hover:shadow-lg transition-shadow space-y-2 active:shadow-none"
+      className={`bg-white hover:shadow-lg transition-shadow space-y-2 active:shadow-none block ${className}`}
     >
       <div className="relative h-[200px] w-full">
         {item.field_image ? (
@@ -30,7 +36,7 @@ export default function CatalogItemTeaser({ item }: CatalogItemTeaserProps) {
       <div className="p-2 pt-0">
         <div className="text-sm font-semibold">{item.title}</div>
         {item.field_vendor_code && (
-          <p className="text-gray-600">{item.field_vendor_code}</p>
+          <p className="text-gray-600 text-xs">{item.field_vendor_code}</p>
         )}
       </div>
     </Link>

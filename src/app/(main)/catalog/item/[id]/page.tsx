@@ -1,190 +1,86 @@
-import Breadcrumbs from "@/components/shared/catalog/Breadcrumbs"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { drupal } from "@/lib/drupal"
-import { absoluteUrl } from "@/lib/utils"
-import { DrupalNode } from "next-drupal"
-import Image from "next/image"
+// src/app/(main)/catalog/item/[id]/page.tsx
+import { notFound } from "next/navigation"
+import { Suspense } from "react"
+import { MaterialTemplate } from "@/components/catalog/templates/MaterialTemplate"
+import { getAllCategoryTerms, getCategoryById } from "@/lib/api/taxonomy"
+import { getMaterialById } from "@/lib/api/material"
+import { generateMaterialBreadcrumbs } from "@/lib/utils/catalog-helpers"
 
-const t = {
-  tableHead: "Характеристики",
-  tableValue: "Значение",
-  // Основные данные
-  sku: "Артикул",
-  field_category: "Категория",
-  field_color: "Цвет",
-  field_image: "Изображение",
-  field_technical_description: "Техническое описание",
-  // Размеры
-  field_length: "Длина",
-  field_thickness: "Толщина",
-  field_width: "Ширина",
-  // Характеристики (нет данных)
-  field_brand: "Бренд",
-  field_material: "Материал",
-  field_surface: "Поверхность",
-  field_texture: "Текстура",
-  // Склад, доставка (нет данных)
-  field_price: "Цена",
-  field_price_m2: "Цена за квадратный метр",
-  field_size: "Вместимость в один контейнер",
-  field_delivery_time: "Время доставки",
-  field_inventory: "Количество на складе",
-  field_example: "Примеры",
-}
-
-interface MaterialDetailPageProps extends DrupalNode {
-  field_category: {
-    name: string
-    parent: [
-      {
-        drupal_internal__tid: string
-        name: string
-      },
-    ]
-  }
-}
-
-export default async function MaterialDetailPage({
+export default async function MaterialPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
 
+  return (
+    <Suspense fallback={<MaterialPageSkeleton />}>
+      <MaterialPageContent materialId={id} />
+    </Suspense>
+  )
+}
+
+async function MaterialPageContent({ materialId }: { materialId: string }) {
   try {
-    const material = await drupal.getResourceByPath<MaterialDetailPageProps>(
-      `/item/${id}`,
-      {
-        params: {
-          "fields[node--material]":
-            "title,field_image,field_vendor_code,field_brand,field_color,field_image,field_category,field_technical_description,field_length,field_thickness,field_width,field_material,field_surface,field_texture,field_price,field_price_m2,field_size,field_delivery_time,field_inventory,field_example",
-          include: "field_image,uid,field_category,field_category.parent", // добавили parent
-        },
-      }
-    )
+    const material = await getMaterialById(materialId)
+
     if (!material) {
-      throw new Response("Not Found", { status: 404 })
+      notFound()
     }
 
-    const parentTerm = material.field_category.parent[0]
+    // Получение информации о категории материала
+    const allTerms = await getAllCategoryTerms()
+    let category = null
+    let parentCategory = null
 
-    return (
-      <article className="container mx-auto px-4 py-10">
-        <div className="grid md:grid-cols-2 gap-10">
-          <div>
-            <Breadcrumbs
-              parentTerm={parentTerm}
-              term={material}
-              currentPage={material.field_vendor_code}
-            />
-            <h1 className="text-4xl font-bold mb-6">{material.title}</h1>
-            <div className="mb-4">
-              {t.sku}: {material.field_vendor_code}
-            </div>
-            <div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t.tableHead}</TableHead>
-                    <TableHead>{t.tableValue}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>{t.field_category}</TableCell>
-                    <TableCell>{material.field_category.name}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_color}</TableCell>
-                    <TableCell>{material.field_color}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_technical_description}</TableCell>
-                    <TableCell>
-                      {material.field_technical_description}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_length}</TableCell>
-                    <TableCell>{material.field_length}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_thickness}</TableCell>
-                    <TableCell>{material.field_thickness}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_width}</TableCell>
-                    <TableCell>{material.field_width}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_material}</TableCell>
-                    <TableCell>{material.field_material}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_surface}</TableCell>
-                    <TableCell>{material.field_surface}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_texture}</TableCell>
-                    <TableCell>{material.field_textura}</TableCell>
-                  </TableRow>
-                  {/* <TableRow>
-                    <TableCell>{t.field_price}</TableCell>
-                    <TableCell>{material.field_price}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_price_m2}</TableCell>
-                    <TableCell>{material.field_price_m2}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_size}</TableCell>
-                    <TableCell>{material.field_size}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_delivery_time}</TableCell>
-                    <TableCell>{material.field_delivery_time}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>{t.field_inventory}</TableCell>
-                    <TableCell>{material.field_inventory}</TableCell>
-                  </TableRow> */}
-                </TableBody>
-              </Table>
-            </div>
-            {material.body?.processed && (
-              <div
-                dangerouslySetInnerHTML={{ __html: material.body.processed }}
-                className="prose prose-lg max-w-none mt-6"
-              />
-            )}
-          </div>
-          <div>
-            <div className="relative h-[300px]">
-              <Image
-                src={absoluteUrl(material.field_image[0].uri.url)}
-                alt={material.title || "Изображение материала"}
-                className="object-cover"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                priority={false}
-                loading="lazy"
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAEtAJJXIDTjwAAAABJRU5ErkJggg=="
-              />
-            </div>
-          </div>
-        </div>
-      </article>
+    if (material.field_category) {
+      const categoryId = material.field_category.drupal_internal__tid.toString()
+      category = getCategoryById(allTerms, categoryId)
+
+      // Если у категории есть родитель, получаем его
+      if (category && category.parent && category.parent[0]?.id !== "virtual") {
+        // Извлекаем ID родительского термина из строки вида "taxonomy_term--category:123"
+
+        parentCategory = getCategoryById(
+          allTerms,
+          category.parent[0].drupal_internal__tid.toString()
+        )
+      }
+    }
+
+    // Формируем хлебные крошки с учетом всех уровней
+    const breadcrumbs = generateMaterialBreadcrumbs(
+      material,
+      category || undefined,
+      parentCategory || undefined
     )
+
+    return <MaterialTemplate material={material} breadcrumbs={breadcrumbs} />
   } catch (error) {
     console.error("Error fetching material:", error)
-    throw new Response("Not Found", { status: 404 })
+    notFound()
   }
+}
+
+function MaterialPageSkeleton() {
+  return (
+    <div className="container mx-auto px-4 py-10">
+      <div className="grid md:grid-cols-2 gap-10">
+        <div>
+          <div className="h-10 bg-gray-200 rounded w-3/4 mb-6 animate-pulse"></div>
+          <div className="h-6 bg-gray-200 rounded w-1/2 mb-4 animate-pulse"></div>
+
+          <div className="space-y-4 animate-pulse">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="h-8 bg-gray-200 rounded w-full"></div>
+            ))}
+          </div>
+        </div>
+
+        <div className="animate-pulse">
+          <div className="bg-gray-200 h-[300px] w-full"></div>
+        </div>
+      </div>
+    </div>
+  )
 }

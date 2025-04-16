@@ -7,8 +7,6 @@ export async function POST(request: NextRequest) {
 
     const url = drupal.buildUrl("/webform_rest/submit")
 
-    console.log(body)
-
     // Submit to Drupal.
     const result = await drupal.fetch(url.toString(), {
       method: "POST",

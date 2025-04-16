@@ -1,66 +1,69 @@
-import CatalogItemTeaser from "@/components/shared/catalog/CatalogItemTeaser"
-import { drupal } from "@/lib/drupal"
-import { DrupalNode } from "next-drupal"
-import Breadcrumbs from "@/components/shared/catalog/Breadcrumbs"
-import { getAllCategoryTerms, getParentTermById } from "@/lib/taxonomy-service"
+// src/app/(main)/catalog/[parentTerm]/[termId]/page.tsx
 import { notFound } from "next/navigation"
+import { Suspense } from "react"
+import { CategoryTemplate } from "@/components/catalog/templates/CategoryTemplate"
+import { getAllCategoryTerms, getCategoryById } from "@/lib/api/taxonomy"
+import { getMaterialsByCategory } from "@/lib/api/material"
+import { generateCategoryBreadcrumbs } from "@/lib/utils/catalog-helpers"
 
-export default async function TermCategoryPage({
+export default async function SubcategoryPage({
   params,
 }: {
-  params: Promise<{ termId: string; parentTerm: string }>
+  params: Promise<{ parentTerm: string; termId: string }>
 }) {
-  const { termId, parentTerm } = await params
+  const { parentTerm, termId } = await params
+  return (
+    <Suspense fallback={<CategoryPageSkeleton />}>
+      <SubcategoryPageContent parentTermId={parentTerm} termId={termId} />
+    </Suspense>
+  )
+}
 
+async function SubcategoryPageContent({
+  parentTermId,
+  termId,
+}: {
+  parentTermId: string
+  termId: string
+}) {
   const allTerms = await getAllCategoryTerms()
-  const currentTerm = getParentTermById(allTerms, termId)
-  const parentTermInfo = getParentTermById(allTerms, parentTerm)
+  const category = getCategoryById(allTerms, termId)
+  const parentCategory = getCategoryById(allTerms, parentTermId)
 
-  // Check if either term doesn't exist
-  if (!currentTerm || !parentTermInfo) {
+  if (!category || !parentCategory) {
     notFound()
   }
 
-  const materials = await drupal.getResourceCollection<DrupalNode[]>(
-    "node--material",
-    {
-      params: {
-        "fields[node--material]":
-          "title,field_image,field_category,drupal_internal__nid,field_vendor_code",
-        "filter[status]": "1",
-        "filter[field_category.drupal_internal__tid]": termId,
-        include: "field_image",
-      },
-    }
-  )
+  // Получаем материалы текущей категории
+  const materials = await getMaterialsByCategory(termId)
 
-  // Prepare the term data in the format expected by Breadcrumbs
-  const termData = {
-    field_category: {
-      name: currentTerm.name,
-      drupal_internal__tid: currentTerm.drupal_internal__tid.toString(),
-    },
-  }
+  // Формируем хлебные крошки с учетом всех уровней иерархии
+  const breadcrumbs = generateCategoryBreadcrumbs(category, parentCategory)
 
   return (
-    <div className="container mx-auto py-8">
-      <Breadcrumbs
-        parentTerm={{
-          name: parentTermInfo.name,
-          drupal_internal__tid: parentTermInfo.drupal_internal__tid.toString(),
-        }}
-        term={termData}
-      />
-      <h1 className="text-2xl font-bold mb-6">{currentTerm.name}</h1>
+    <CategoryTemplate
+      category={category}
+      materials={materials}
+      breadcrumbs={breadcrumbs}
+    />
+  )
+}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-        {materials.length > 0 ? (
-          materials.map((item) => (
-            <CatalogItemTeaser key={item.id} item={item} />
-          ))
-        ) : (
-          <p>Материалов не найдено</p>
-        )}
+function CategoryPageSkeleton() {
+  return (
+    <div className="container mx-auto py-8">
+      <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 animate-pulse">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="bg-white rounded-lg shadow">
+            <div className="bg-gray-200 h-[200px] w-full"></div>
+            <div className="p-2">
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )

@@ -1,111 +1,89 @@
-import { drupal } from "@/lib/drupal"
-import { DrupalNode, DrupalTaxonomyTerm } from "next-drupal"
-import Link from "next/link"
+import { notFound, redirect } from "next/navigation"
+import { Suspense } from "react"
+import { CategoryTemplate } from "@/components/catalog/templates/CategoryTemplate"
 import {
   getAllCategoryTerms,
-  getParentTermById,
-  getChildTermsByParentId,
-} from "@/lib/taxonomy-service"
-import { notFound } from "next/navigation"
-import CatalogItemTeaser from "@/components/shared/catalog/CatalogItemTeaser"
-import CatalogList from "@/components/shared/catalog/CatalogList"
+  getCategoryById,
+  getChildCategoriesByParentId,
+} from "@/lib/api/taxonomy"
+import { getMaterialsByCategory } from "@/lib/api/material"
+import { generateCategoryBreadcrumbs } from "@/lib/utils/catalog-helpers"
 
-export interface CatalogItem extends DrupalTaxonomyTerm {
-  field_teaser_text?: string
-}
-
-async function CatalogContent({ parentTerm }: { parentTerm: string }) {
-  const allTerms = await getAllCategoryTerms()
-  const currentTerm = getParentTermById(allTerms, parentTerm)
-
-  if (!currentTerm) {
-    notFound()
-  }
-
-  // Get child categories
-  const childCategories = await drupal.getResourceCollection<CatalogItem[]>(
-    "taxonomy_term--category",
-    {
-      params: {
-        "fields[taxonomy_term--category]":
-          "name,field_teaser_text,drupal_internal__tid,parent",
-        "filter[status]": "1",
-        "filter[parent.drupal_internal__tid]": parentTerm,
-      },
-    }
-  )
-
-  // If there are child categories, display them
-  if (childCategories && childCategories.length > 0) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {childCategories.map((item) => (
-          <Link
-            href={`/catalog/${parentTerm}/${item.drupal_internal__tid}`}
-            key={item.drupal_internal__tid}
-          >
-            <div className="border p-4 rounded-lg hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-semibold">{item.name}</h2>
-              {item.field_teaser_text && (
-                <p className="text-gray-600 mt-2">{item.field_teaser_text}</p>
-              )}
-            </div>
-          </Link>
-        ))}
-      </div>
-    )
-  }
-
-  // If no child categories, display materials for this category
-  const materials = await drupal.getResourceCollection<DrupalNode[]>(
-    "node--material",
-    {
-      params: {
-        "fields[node--material]":
-          "title,field_image,field_category,drupal_internal__nid,field_vendor_code",
-        "filter[status]": "1",
-        "filter[field_category.drupal_internal__tid]": parentTerm,
-        include: "field_image",
-      },
-    }
-  )
-
-  return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Материалы</h2>
-      {materials.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {materials.map((item) => (
-            <CatalogItemTeaser key={item.id} item={item} />
-          ))}
-        </div>
-      ) : (
-        <p className="py-4">Материалов не найдено</p>
-      )}
-    </div>
-  )
-}
-
-export default async function CatalogByParentTerm({
+export default async function CategoryPage({
   params,
 }: {
   params: Promise<{ parentTerm: string }>
 }) {
   const { parentTerm } = await params
-  const allTerms = await getAllCategoryTerms()
-  const currentTerm = getParentTermById(allTerms, parentTerm)
+  return (
+    <Suspense fallback={<CategoryPageSkeleton />}>
+      <CategoryPageContent termId={parentTerm} />
+    </Suspense>
+  )
+}
 
-  if (!currentTerm) {
+async function CategoryPageContent({ termId }: { termId: string }) {
+  const allTerms = await getAllCategoryTerms()
+  const category = getCategoryById(allTerms, termId)
+
+  if (!category) {
     notFound()
   }
 
+  // Проверяем, есть ли у термина родитель
+  const hasParent =
+    category.parent &&
+    category.parent[0]?.id !== "virtual" &&
+    category.parent.length > 0
+
+  // Если у термина есть родитель, это значит, что доступ должен быть через путь с родителем
+  if (hasParent) {
+    notFound()
+  }
+
+  // Получаем дочерние категории
+  const childCategories = getChildCategoriesByParentId(allTerms, termId)
+
+  // Получаем материалы только если нет дочерних категорий
+  const materials =
+    childCategories.length === 0 ? await getMaterialsByCategory(termId) : []
+
+  // Формируем хлебные крошки
+  const breadcrumbs = generateCategoryBreadcrumbs(category)
+
+  console.log("CategoryPageContent", {
+    category,
+    childCategories,
+    materials,
+    breadcrumbs,
+  })
+
+  return (
+    <CategoryTemplate
+      category={category}
+      childCategories={childCategories}
+      materials={materials}
+      breadcrumbs={breadcrumbs}
+    />
+  )
+}
+
+function CategoryPageSkeleton() {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-6">
-        {currentTerm?.name || "Категория"}
-      </h1>
+      <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
 
-      <CatalogContent parentTerm={parentTerm} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white p-6 rounded-lg border border-gray-200"
+          >
+            <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-full"></div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -90,7 +90,6 @@ export async function POST(request: Request) {
         }
       }) || []
 
-    console.log(rawResults)
     const responseData = {
       results: results || [],
       meta: {
