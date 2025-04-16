@@ -1,5 +1,5 @@
 import { drupal } from "@/lib/drupal"
-import { DrupalTaxonomyTerm } from "next-drupal"
+import { DrupalNode, DrupalTaxonomyTerm } from "next-drupal"
 import Link from "next/link"
 import {
   getAllCategoryTerms,
@@ -7,6 +7,8 @@ import {
   getChildTermsByParentId,
 } from "@/lib/taxonomy-service"
 import { notFound } from "next/navigation"
+import CatalogItemTeaser from "@/components/shared/catalog/CatalogItemTeaser"
+import CatalogList from "@/components/shared/catalog/CatalogList"
 
 export interface CatalogItem extends DrupalTaxonomyTerm {
   field_teaser_text?: string
@@ -20,7 +22,8 @@ async function CatalogContent({ parentTerm }: { parentTerm: string }) {
     notFound()
   }
 
-  const category = await drupal.getResourceCollection<CatalogItem[]>(
+  // Get child categories
+  const childCategories = await drupal.getResourceCollection<CatalogItem[]>(
     "taxonomy_term--category",
     {
       params: {
@@ -32,23 +35,53 @@ async function CatalogContent({ parentTerm }: { parentTerm: string }) {
     }
   )
 
+  // If there are child categories, display them
+  if (childCategories && childCategories.length > 0) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {childCategories.map((item) => (
+          <Link
+            href={`/catalog/${parentTerm}/${item.drupal_internal__tid}`}
+            key={item.drupal_internal__tid}
+          >
+            <div className="border p-4 rounded-lg hover:shadow-md transition-shadow">
+              <h2 className="text-xl font-semibold">{item.name}</h2>
+              {item.field_teaser_text && (
+                <p className="text-gray-600 mt-2">{item.field_teaser_text}</p>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+    )
+  }
+
+  // If no child categories, display materials for this category
+  const materials = await drupal.getResourceCollection<DrupalNode[]>(
+    "node--material",
+    {
+      params: {
+        "fields[node--material]":
+          "title,field_image,field_category,drupal_internal__nid,field_vendor_code",
+        "filter[status]": "1",
+        "filter[field_category.drupal_internal__tid]": parentTerm,
+        include: "field_image",
+      },
+    }
+  )
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {category.map((item) => (
-        <Link
-          href={`/catalog/${parentTerm}/${item.drupal_internal__tid}`}
-          key={item.drupal_internal__tid}
-        >
-          <div className="border p-4 rounded-lg hover:shadow-md transition-shadow">
-            <h2 className="text-xl font-semibold">{item.name}</h2>
-            {item.hasItems ? (
-              <p className="text-gray-600">Материалов: {item.itemCount}</p>
-            ) : (
-              <p className="text-gray-500 text-sm mt-2">Нет материалов</p>
-            )}
-          </div>
-        </Link>
-      ))}
+    <div>
+      <h2 className="text-xl font-semibold mb-4">Материалы</h2>
+      {materials.length > 0 ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {materials.map((item) => (
+            <CatalogItemTeaser key={item.id} item={item} />
+          ))}
+        </div>
+      ) : (
+        <p className="py-4">Материалов не найдено</p>
+      )}
     </div>
   )
 }

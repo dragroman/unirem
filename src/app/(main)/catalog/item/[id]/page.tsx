@@ -75,13 +75,15 @@ export default async function MaterialDetailPage({
 
     const parentTerm = material.field_category.parent[0]
 
-    console.log(material)
-
     return (
       <article className="container mx-auto px-4 py-10">
         <div className="grid md:grid-cols-2 gap-10">
           <div>
-            <Breadcrumbs parentTerm={parentTerm} term={material} />
+            <Breadcrumbs
+              parentTerm={parentTerm}
+              term={material}
+              currentPage={material.field_vendor_code}
+            />
             <h1 className="text-4xl font-bold mb-6">{material.title}</h1>
             <div className="mb-4">
               {t.sku}: {material.field_vendor_code}

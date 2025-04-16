@@ -1,9 +1,8 @@
 import CatalogItemTeaser from "@/components/shared/catalog/CatalogItemTeaser"
 import { drupal } from "@/lib/drupal"
 import { DrupalNode } from "next-drupal"
-
+import Breadcrumbs from "@/components/shared/catalog/Breadcrumbs"
 import { getAllCategoryTerms, getParentTermById } from "@/lib/taxonomy-service"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 
 export default async function TermCategoryPage({
@@ -35,8 +34,23 @@ export default async function TermCategoryPage({
     }
   )
 
+  // Prepare the term data in the format expected by Breadcrumbs
+  const termData = {
+    field_category: {
+      name: currentTerm.name,
+      drupal_internal__tid: currentTerm.drupal_internal__tid.toString(),
+    },
+  }
+
   return (
     <div className="container mx-auto py-8">
+      <Breadcrumbs
+        parentTerm={{
+          name: parentTermInfo.name,
+          drupal_internal__tid: parentTermInfo.drupal_internal__tid.toString(),
+        }}
+        term={termData}
+      />
       <h1 className="text-2xl font-bold mb-6">{currentTerm.name}</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
