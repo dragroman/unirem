@@ -41,12 +41,11 @@ const t = {
 export default async function MaterialDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const { id } = await params
 
   try {
-    // Использование getResourceByPath с системным путем узла
     const material = await drupal.getResourceByPath<DrupalNode>(`/node/${id}`, {
       params: {
         "fields[node--material]":
@@ -57,10 +56,10 @@ export default async function MaterialDetailPage({
     if (!material) {
       throw new Response("Not Found", { status: 404 })
     }
-    console.log(material)
+
     return (
       <article className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-2 gap-10">
+        <div className="grid md:grid-cols-2 gap-10">
           <div>
             <div className="relative h-[300px]">
               <Image

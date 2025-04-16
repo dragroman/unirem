@@ -11,6 +11,7 @@ export interface CatalogItem {
   id: string
   drupal_internal__nid: number
   title: string
+  field_vendor_code?: string
   field_preview_text?: string
   field_category?: {
     drupal_internal__tid: number

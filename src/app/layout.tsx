@@ -1,4 +1,3 @@
-import { DraftAlert } from "@/components/misc/DraftAlert"
 import { GoogleTagManager } from "@next/third-parties/google"
 import localFont from "next/font/local"
 
@@ -6,8 +5,6 @@ import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
 import "@/styles/globals.css"
-import Header from "@/components/layout/Header"
-import Footer from "@/components/layout/Footer"
 
 const inter = localFont({
   src: [
@@ -42,21 +39,12 @@ export const metadata: Metadata = {
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
-export default function RootLayout({
-  // Layouts must accept a children prop.
-  // This will be populated with nested layouts or pages
-  children,
-}: {
-  children: ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body className={`${inter.className} antialiased scroll-smooth`}>
-        <Header />
-        <DraftAlert />
         {children}
-        <Footer />
       </body>
     </html>
   )
