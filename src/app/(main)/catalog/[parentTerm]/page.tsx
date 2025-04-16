@@ -51,13 +51,6 @@ async function CategoryPageContent({ termId }: { termId: string }) {
   // Формируем хлебные крошки
   const breadcrumbs = generateCategoryBreadcrumbs(category)
 
-  console.log("CategoryPageContent", {
-    category,
-    childCategories,
-    materials,
-    breadcrumbs,
-  })
-
   return (
     <CategoryTemplate
       category={category}

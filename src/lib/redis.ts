@@ -3,7 +3,7 @@ import Redis from "ioredis"
 
 // Инициализируем Redis клиент с URL из переменных окружения
 // Убедитесь, что в .env.local добавлена переменная REDIS_URL
-const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379")
+const redis = new Redis(process.env.REDIS_URL || "redis:///shared-redis:6379")
 
 // Создаем интерфейс кэша для next-drupal
 export const redisCache: DataCache = {
