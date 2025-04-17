@@ -66,12 +66,12 @@ export function MaterialTemplate({
     }))
 
   return (
-    <article className="container mx-auto px-4 py-10">
+    <article className="container mx-auto py-8">
       <CatalogBreadcrumbs items={breadcrumbs} />
 
       <div className="grid md:grid-cols-2 gap-10">
         <div>
-          <h1 className="text-4xl font-bold mb-6">{material.title}</h1>
+          <h1 className="text-2xl font-bold mb-6">{material.title}</h1>
 
           <div className="mb-4">Артикул: {material.field_vendor_code}</div>
 

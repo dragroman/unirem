@@ -17,14 +17,22 @@ import {
 
 export function MenuDesktop() {
   const pathname = usePathname()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const menuItems = getMenuItems()
 
   return (
     <NavigationMenu className="hidden lg:flex">
       <NavigationMenuList>
         {menuItems.map((item) => {
+          // Подсвечиваем активный пункт только после монтирования
           const isActive =
-            pathname === item.url || pathname.startsWith(item.url + "/")
+            mounted &&
+            (pathname === item.url || pathname.startsWith(item.url + "/"))
           const withSubmenu = hasSubmenu(item.id)
 
           // Пункт меню с подменю
